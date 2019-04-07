@@ -112,6 +112,7 @@ special, zero, string, bind, escape, decch, hexch, octch, char :: Action
 smac, rmac, smacdef, rmacdef, startcode, wrapper, encoding :: Action
 actionty, tokenty, typeclass :: Action
 special   (p,_,str) _  = return $ T p (SpecialT  (head str))
+  where head (x:_) = x -- local definition to get error location
 zero      (p,_,_)   _  = return $ T p ZeroT
 string    (p,_,str) ln = return $ T p (StringT (extract ln str))
 bind      (p,_,str) _  = return $ T p (BindT (takeWhile isIdChar str))
@@ -120,6 +121,7 @@ decch     (p,_,str) ln = return $ T p (CharT (do_ech 10 ln (take (ln-1) (tail st
 hexch     (p,_,str) ln = return $ T p (CharT (do_ech 16 ln (take (ln-2) (drop 2 str))))
 octch     (p,_,str) ln = return $ T p (CharT (do_ech 8  ln (take (ln-2) (drop 2 str))))
 char      (p,_,str) _  = return $ T p (CharT (head str))
+  where head (x:_) = x -- local definition to get error location
 smac      (p,_,str) ln = return $ T p (SMacT (mac ln str))
 rmac      (p,_,str) ln = return $ T p (RMacT (mac ln str))
 smacdef   (p,_,str) ln = return $ T p (SMacDefT (macdef ln str))
@@ -158,6 +160,7 @@ esc str =
     't' -> '\t'
     'v' -> '\v'
     c   ->  c
+  where head (x:_) = x -- local definition to get error location
 
 parseInt :: Int -> String -> Int
 parseInt radix ds = foldl1 (\n d -> n * radix + d) (map digitToInt ds)

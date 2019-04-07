@@ -86,6 +86,7 @@ charSetRange c1 c2 = makeRangedSet [Range (BoundaryBelow c1) (BoundaryAbove c2)]
 byteSetToArray :: ByteSet -> Array Byte Bool
 byteSetToArray set = array (fst (head ass), fst (last ass)) ass
   where ass = [(c,rSetHas set c) | c <- [0..0xff]]
+        head (x:_) = x -- local definition to get error location
 
 byteSetElems :: ByteSet -> [Byte]
 byteSetElems set = [c | c <- [0 .. 0xff], rSetHas set c]
@@ -164,4 +165,3 @@ charSetQuote s = "(\\c -> " ++ foldr (\x y -> x ++ " || " ++ y) "False" (map quo
           quoteH (BoundaryBelow a) = "c < " ++ show a
           quoteH (BoundaryAboveAll) = "True"
           quoteH (BoundaryBelowAll) = "False"
-

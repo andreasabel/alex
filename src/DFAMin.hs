@@ -63,6 +63,8 @@ minimizeDFA  dfa@ DFA { dfa_start_states = starts,
                 in (n, State accs out)
                | (n, equiv) <- numbered_states
                ]
+        where head (x:_) = x -- local definition to get error location
+
 
       fix_acc acc = acc { accRightCtx = fix_rctxt (accRightCtx acc) }
 
@@ -145,6 +147,3 @@ groupEquivStates DFA { dfa_states = statemap }
                              replaceyin (z:zs)
                                 | z == y    = i : d : zs
                                 | otherwise = z : replaceyin zs
-
-
-

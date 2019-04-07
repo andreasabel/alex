@@ -404,6 +404,7 @@ mkTables dfa = -- trace (show (defaults)) $
                  compareSnds (_,a) (_,b) = compare a b
                  eq = groupBy (\(_,a) (_,b) -> a == b) sorted
                  lengths  a b = length a `compare` length b
+                 head (x:_) = x -- local definition to get error location
 
         -- remove all the default productions from the DFA
         dfa_no_defaults =
